@@ -1,12 +1,14 @@
 package cz.profinit.csobp.mdchecker.plugins;
 
+import java.awt.Component;
+
 
 /**
  * Diff Plugin slouzi k vytvorezeni diffu mezi dvemi dodavkami.
  * 
  * @author: vjinoch
  */
-public class DiffPlugin implements MDPlugin {
+public class DiffPlugin extends MDPlugin {
 
     private String oldWar;
 
@@ -40,6 +42,13 @@ public class DiffPlugin implements MDPlugin {
 	@Override
 	public String toString() {
 		return "DiffPlugin [oldWar=" + oldWar + ", newWar=" + newWar + "]";
+	}
+
+
+	@Override
+	public Component getComponent() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
