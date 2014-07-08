@@ -15,9 +15,11 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
+import cz.profinit.csobp.mdchecker.Main;
 import cz.profinit.csobp.mdchecker.plugins.MDPlugin;
 
 /**
@@ -29,6 +31,8 @@ import cz.profinit.csobp.mdchecker.plugins.MDPlugin;
  */
 public class MDContainer {
 
+	private Logger logger = Logger.getLogger(MDContainer.class);
+	
 	/**
 	 * Hlavni okno aplikace
 	 */
@@ -42,11 +46,14 @@ public class MDContainer {
 	/**
 	 * Properties file obsahujici retezce
 	 */
-	private final Properties properties;
+	private final Properties string;
 
-	public MDContainer(Properties properties) {
-		this.properties = properties;
-
+	public MDContainer(ApplicationContext applicationContext) {
+		logger.info("Nacitam string properties:");
+		this.string = (Properties) applicationContext.getBean("string");
+		logger.info(string);
+		
+		logger.info("Inicializuji hlavni behove okno");
 		mainFrame = new JFrame(getString("main.title"));
 		mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainFrame.addWindowListener(new ContainerWindowListener());
@@ -67,9 +74,12 @@ public class MDContainer {
 	 *            plugin k zobrazeni
 	 */
 	public void createPlugin(MDPlugin plugin) {
+		logger.info("Spoustim plugin: " + plugin.getClass().getName());
+		
 		if (!plugins.isEmpty()) {
 			MDPlugin mdPlugin = plugins.peek();
 			if (mdPlugin != null) {
+				logger.info("Deaktivuji soucasny plugin:" + mdPlugin.getClass().getName());
 				mainFrame.remove(mdPlugin.getComponent());
 				mdPlugin.getComponent().setVisible(false);
 			}
@@ -82,6 +92,8 @@ public class MDContainer {
 		plugin.create(parent, this);
 
 		plugins.add(plugin);
+
+		logger.info("Aktivuji novy plugin:" + plugin.getClass().getName());
 		mainFrame.add(plugin.getComponent());
 		plugin.getComponent().setVisible(true);
 	}
@@ -92,12 +104,15 @@ public class MDContainer {
 	 */
 	public void finishPlugin() {
 		MDPlugin plugin = plugins.pop();
+		logger.info("Ukoncuji bezici plugin:" + plugin.getClass().getName());
+		
 		plugin.getComponent().setVisible(false);
 		mainFrame.remove(plugin.getComponent());
 
 		if (!plugins.isEmpty()) {
 			plugin = plugins.peek();
 			if (plugin != null) {
+				logger.info("Aktivuji rodicovsky plugin:" + plugin.getClass().getName());
 				mainFrame.add(plugin.getComponent());
 				plugin.getComponent().setVisible(true);
 			}
@@ -113,8 +128,8 @@ public class MDContainer {
 	 * @return zpracovany text
 	 */
 	public String getString(String name) {
-		if (properties.containsKey(name)) {
-			return properties.getProperty(name);
+		if (string.containsKey(name)) {
+			return string.getProperty(name);
 		}
 		return name;
 	}
@@ -131,8 +146,8 @@ public class MDContainer {
 	 * @return zpracovany text
 	 */
 	public String getString(String name, Object... params) {
-		if (properties.contains(name)) {
-			String text = properties.getProperty(name);
+		if (string.contains(name)) {
+			String text = string.getProperty(name);
 			if (text.isEmpty())
 				return null;
 
@@ -148,10 +163,6 @@ public class MDContainer {
 	 * @author: vjinoch
 	 */
 	private class ContainerWindowListener implements WindowListener {
-
-		public static final String MESSAGE = "Prejete si zavrit MD Checker?";
-
-		public static final String TITLE = "Konec";
 
 		/*
 		 * (non-Javadoc)

@@ -1,10 +1,12 @@
-package cz.profinit.csobp.mdchecker.plugins;
+package cz.profinit.csobp.mdchecker.plugins.loadconfig;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+
+import cz.profinit.csobp.mdchecker.plugins.MDPlugin;
 
 
 public class LoadConfigPlugin extends MDPlugin {
