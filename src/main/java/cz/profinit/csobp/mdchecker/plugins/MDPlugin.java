@@ -1,8 +1,7 @@
 package cz.profinit.csobp.mdchecker.plugins;
 
-import java.awt.Component;
+import javax.swing.JComponent;
 
-import scala.annotation.meta.param;
 import cz.profinit.csobp.mdchecker.core.MDContainer;
 
 /**
@@ -14,11 +13,15 @@ import cz.profinit.csobp.mdchecker.core.MDContainer;
  */
 public abstract class MDPlugin {
 	
+	/**
+	 * Reference na rodicovsky plugin
+	 */
 	protected MDPlugin parent;
 	
+	/**
+	 * Reference na container
+	 */
 	protected MDContainer container;
-	
-	protected Component component;
 	
 	/**
 	 * 
@@ -29,24 +32,60 @@ public abstract class MDPlugin {
 	public void create(MDPlugin parent, MDContainer mdContainer) {
 		this.parent = parent;
 		this.container = mdContainer;
+		
+		afterCreate();
 	}
 	
+	/**
+	 * After create je operace, ktera je provadena po vytvoreni pluginu
+	 */
+	public void afterCreate() {
+		
+	}
 	
 	/**
-	 * 
+	 * Akce provede ukonceni pluginu
 	 */
 	public void finish() {
 		container.finishPlugin();
 	}
 	
-	
-	public abstract Component getComponent();
+	/**
+	 * Vykonani samotne akce pluginu
+	 */
+	public abstract void execute();
 	
 	/**
+	 * Vraci referenci na hlavni componentu ktera reprezentuje plugin
 	 * 
-	 * Testovaci metoda
-	 * 
-	 * @return toString value
+	 * @return komponenta reprezentujici plugin
 	 */
-	public abstract String getValue();
+	public abstract JComponent getComponent();
+	
+	/**
+	 * Metoda vraci text definovany v property souboru
+	 * 
+	 * @param name
+	 *            nazev textu
+	 * 
+	 * @return zpracovany text
+	 */
+	public String getString(String name) {
+		return container.getString(name);
+	}
+
+	/**
+	 * Metoda vraci text definovany v property souboru a vlozi do nej zvolene
+	 * parametry. Vyuziva MessageFormatter.
+	 * 
+	 * @param name
+	 *            nazev textu
+	 * @param params
+	 *            parametry ktere maji byt vlozeny do textu
+	 * 
+	 * @return zpracovany text
+	 */
+	public String getString(String name, Object... params) {
+		return container.getString(name, params);
+	}
 }

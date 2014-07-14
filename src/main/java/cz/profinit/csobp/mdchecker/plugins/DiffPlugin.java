@@ -1,6 +1,6 @@
 package cz.profinit.csobp.mdchecker.plugins;
 
-import java.awt.Component;
+import javax.swing.JComponent;
 
 
 /**
@@ -46,9 +46,15 @@ public class DiffPlugin extends MDPlugin {
 
 
 	@Override
-	public Component getComponent() {
+	public JComponent getComponent() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void execute() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

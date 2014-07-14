@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<spring:beans xmlns="http://profinit.eu/schema/MDChecker"
-	xmlns:spring="http://www.springframework.org/schema/beans"
+<spring:beans xmlns:spring="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	xmlns="http://profinit.eu/schema/MDChecker"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://profinit.eu/schema/MDChecker http://profinit.eu/schema/MDChecker.xsd">
 
     <!--
@@ -12,5 +12,6 @@
             </constructor-arg>
         </bean>
     -->
+    
     <diffplugin oldWar="a" newWar="b" />
 </spring:beans>

@@ -4,20 +4,12 @@ import cz.profinit.csobp.mdchecker.plugins.DiffPlugin;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.config.ConstructorArgumentValues;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.beans.factory.xml.AbstractBeanDefinitionParser;
-import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
-import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * 

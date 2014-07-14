@@ -1,25 +1,16 @@
 package cz.profinit.csobp.mdchecker.core;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.Stack;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
-
-import cz.profinit.csobp.mdchecker.Main;
 import cz.profinit.csobp.mdchecker.plugins.MDPlugin;
 
 /**
@@ -32,6 +23,11 @@ import cz.profinit.csobp.mdchecker.plugins.MDPlugin;
 public class MDContainer {
 
 	private Logger logger = Logger.getLogger(MDContainer.class);
+
+	/**
+	 * Slozka ve ktere jsou ukladana pomocna data
+	 */
+	public final static String DATA_FOLDER = "data/";
 	
 	/**
 	 * Hlavni okno aplikace
@@ -188,7 +184,7 @@ public class MDContainer {
 			int result = JOptionPane.showOptionDialog(null,
 					getString("main.exit.message"),
 					getString("main.exit.title"), JOptionPane.DEFAULT_OPTION,
-					JOptionPane.WARNING_MESSAGE, null, buttons, buttons[0]);
+					JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[0]);
 			if (result == JOptionPane.YES_OPTION) {
 				System.exit(0);
 			}
