@@ -1,6 +1,6 @@
 package cz.profinit.csobp.mdchecker.spring.xml.factory;
 
-import cz.profinit.csobp.mdchecker.plugins.DiffPlugin;
+import cz.profinit.csobp.mdchecker.plugins.diff.DiffPlugin;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
