@@ -1,20 +1,15 @@
 package cz.profinit.csobp.mdchecker.plugins.diff;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JComponent;
 
-import com.sun.tools.javadoc.RootDocImpl;
+import org.apache.commons.io.FileUtils;
 
-import jdiff.API;
 import jdiff.APIComparator;
-import jdiff.JDiff;
 import cz.profinit.csobp.mdchecker.plugins.MDPlugin;
-import difflib.Delta;
 import difflib.DiffUtils;
 import difflib.Patch;
 
@@ -34,29 +29,20 @@ public class DiffPlugin extends MDPlugin {
 		this.newWar = newWar;
 	}
 
-	private static List<String> fileToLines(String filename) {
-		List<String> lines = new LinkedList<String>();
-		String line = "";
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(filename));
-			while ((line = in.readLine()) != null) {
-				lines.add(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return lines;
-	}
-
 	public void afterCreate() {
 		System.out.println(APIComparator.docChanged(oldWar, newWar));
 		System.out.println(APIComparator.changedInheritance(oldWar, newWar));
 		// API api = jdiff.XMLToAPI.readFile("data/configs.properties", false,
 		// "test");
 
-		List<String> original = fileToLines("data/configs.properties");
-		List<String> revised = fileToLines("data/configs2.properties");
-
+		List<String> original = null;
+		List<String> revised = null;
+		try {
+			original = FileUtils.readLines(new File("data/configs.properties"));
+			revised = FileUtils.readLines(new File("data/configs2.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Patch patch = DiffUtils.diff(original, revised);
 
 		

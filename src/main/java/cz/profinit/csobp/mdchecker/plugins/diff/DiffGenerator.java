@@ -5,13 +5,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
-
 import org.apache.commons.io.FileUtils;
 
 import difflib.Delta;
-import difflib.Delta.TYPE;
 import difflib.Patch;
 
 public class DiffGenerator {
