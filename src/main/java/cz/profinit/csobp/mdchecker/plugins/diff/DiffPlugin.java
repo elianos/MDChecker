@@ -32,8 +32,6 @@ public class DiffPlugin extends MDPlugin {
 	public void afterCreate() {
 		System.out.println(APIComparator.docChanged(oldWar, newWar));
 		System.out.println(APIComparator.changedInheritance(oldWar, newWar));
-		// API api = jdiff.XMLToAPI.readFile("data/configs.properties", false,
-		// "test");
 
 		List<String> original = null;
 		List<String> revised = null;
@@ -44,8 +42,6 @@ public class DiffPlugin extends MDPlugin {
 			e.printStackTrace();
 		}
 		Patch patch = DiffUtils.diff(original, revised);
-
-		
 
 	};
 

@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import cz.profinit.csobp.mdchecker.core.MDContainer;
 import cz.profinit.csobp.mdchecker.plugins.loadconfig.LoadConfigPlugin;
+import cz.profinit.csobp.mdchecker.utils.FileManipulatorUtil;
 import difflib.DiffUtils;
 import difflib.Patch;
 
@@ -33,11 +34,11 @@ public class DiffGeneratorTest {
 	
 	@Test
 	public void generateHtmlTest() throws IOException {
-		List<String> original = FileUtils.readLines(new File("src/test/resources/plugins/diff/ClassOld.txt"), "UTF8");
-		List<String> revised = FileUtils.readLines(new File("src/test/resources/plugins/diff/ClassNew.txt"), "UTF8");
+		List<String> original = FileUtils.readLines(FileManipulatorUtil.getResourceFile("plugins/diff/ClassOld.txt"), "UTF8");
+		List<String> revised = FileUtils.readLines(FileManipulatorUtil.getResourceFile("plugins/diff/ClassNew.txt"), "UTF8");
 
 		Patch patch = DiffUtils.diff(original, revised);
-		String result = diffGenerator.generateHtml(original, patch, "data/configs.properties");
+		String result = diffGenerator.generateHtml(original, patch, "file name");
 		System.out.println(result);
 
 	}

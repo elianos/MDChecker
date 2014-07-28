@@ -1,19 +1,35 @@
 package cz.profinit.csobp.mdchecker.plugins.diff;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import cz.profinit.csobp.mdchecker.utils.FileManipulatorUtil;
 import difflib.Delta;
 import difflib.Patch;
 
+/**
+ * Generator vystupu pro rozdil mezi dvemi soubory
+ * 
+ * @author: vjinoch
+ */
 public class DiffGenerator {
 	
+	/**
+	 * uloziste css tylu pro rozdil
+	 */
 	private final static String STYLE_FILE = "assets/style/style.html";
 	
+	/**
+	 * Generuje diff html vystup.
+	 * 
+	 * @param original puvodni radky souboru.
+	 * @param patch patch na novou verzi.
+	 * @param fileName nazev meneneho souboru
+	 * 
+	 * @return html diff.
+	 */
 	public String generateHtml(List<String> original, Patch patch,
 			String fileName) {
 		StringBuilder builder = new StringBuilder();
@@ -36,6 +52,15 @@ public class DiffGenerator {
 		return builder.toString();
 	}
 	
+	/**
+	 * Generuje telo html diffu.
+	 * 
+	 * @param original puvodni radky souboru.
+	 * @param patch patch na novou verzi.
+	 * @param fileName nazev meneneho souboru
+	 * 
+	 * @return telo html diffu.
+	 */
 	public String generateBody(List<String> original, Patch patch,
 			String fileName) {
 		StringBuilder builder = new StringBuilder();
@@ -99,6 +124,12 @@ public class DiffGenerator {
 		return builder.toString();
 	}
 
+	/**
+	 * Generuje zahlavi diffu.
+	 * 
+	 * @param builder pro vygenerovani zahlavi.
+	 * @param fileName nazev souboru.
+	 */
 	private void generateHeader(StringBuilder builder, String fileName) {
 		builder.append("<table>");
 		builder.append("<thead>");
@@ -112,6 +143,12 @@ public class DiffGenerator {
 		builder.append("<tbody>");
 	}
 
+	/**
+	 * Generuje zapati diffu.
+	 * 
+	 * @param builder pro vygenerovani zapati.
+	 * @param fileName nazev souboru.
+	 */
 	private void generateFooter(StringBuilder builder, String fileName) {
 		builder.append("</tbody>");
 		builder.append("<tfoot>");
@@ -128,6 +165,15 @@ public class DiffGenerator {
 		builder.append("</table>");
 	}
 
+	/**
+	 * Generuje html radek diffu.
+	 * 
+	 * @param builder builder pro pripojeni radku.
+	 * @param type radku. INSERT -> pridani, DELETE -> odebrani, NILL -> klasicky radek.
+	 * @param oldLine cislo puvodniho radek.
+	 * @param newLine cislo noveho radek.
+	 * @param value hodnota radku.
+	 */
 	private void generateLine(StringBuilder builder, ERowType type,
 			int oldLine, int newLine, String value) {
 		String rowName = "";
@@ -164,12 +210,21 @@ public class DiffGenerator {
 		builder.append("</tr>");
 	}
 
+	/**
+	 * Nacteni stylu.
+	 * 
+	 * @return vraci html s css styly.
+	 * @throws IOException
+	 */
 	private String loadStyle() throws IOException {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		URL url = classLoader.getResource(STYLE_FILE);
-		return FileUtils.readFileToString(new File(url.getPath()));
+		return FileUtils.readFileToString(FileManipulatorUtil.getResourceFile(STYLE_FILE));
 	}
 	
+	/**
+	 * Enum s typy radku v diff filu.
+	 * 
+	 * @author: vjinoch
+	 */
 	private enum ERowType {
 		INSERT, DELETE, NILL;
 	}
