@@ -116,8 +116,8 @@ public class ConfigurationLine extends javax.swing.JPanel {
 				loadConfigPlugin.getString("main.yes"),
 				loadConfigPlugin.getString("main.no") };
 		int result = JOptionPane.showOptionDialog(null,
-				loadConfigPlugin.getString("main.exit.message"),
-				loadConfigPlugin.getString("main.exit.title"),
+				loadConfigPlugin.getString("load.config.remove.message"),
+				loadConfigPlugin.getString("load.config.remove.title"),
 				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
 				buttons, buttons[0]);
 		if (result == JOptionPane.YES_OPTION) {
