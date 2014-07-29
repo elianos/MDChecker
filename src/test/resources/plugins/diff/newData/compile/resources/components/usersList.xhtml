@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        >
+
+<composite:interface>
+    <composite:attribute name="value" required="true"/>
+    <composite:attribute name="rendered" default="true"/>
+</composite:interface>
+
+<composite:implementation>
+    <h:dataTable styleClass="table" value="#{cc.attrs.value}" var="user" rendered="#{cc.attrs.rendered}">
+        <h:column>
+            <f:facet name="header">Email</f:facet>
+            #{user.email}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Roles</f:facet>
+            <ui:repeat value="#{user.roles.toArray()}" var="role">
+                <h:outputText value="#{role.name}" />
+                <h:outputText value=", " />
+            </ui:repeat>
+        </h:column>
+        <h:column>
+            <h:form>
+                <h:commandButton action="#{usersBean.deactivate(user)}"
+                                 rendered="#{user.activated}"
+                                 onclick="if(! confirm('Do you really want deactivate user?')) return false" value="Deactivate"
+                                 styleClass="btn btn-primary btn-sm"/>
+                <h:commandButton action="#{usersBean.activate(user)}"
+                                 rendered="#{not user.activated}"
+                                 onclick="if(! confirm('Do you really want activate user?')) return false" value="Activate"
+                                 styleClass="btn btn-primary btn-sm"/>
+                <h:commandButton action="#{usersBean.addAdminRole(user)}"
+                                 rendered="#{not rolesHelper.isAdmin(user)}"
+                                 value="Add admin role"
+                                 styleClass="btn btn-primary btn-sm"/>
+                <h:commandButton action="#{usersBean.removeAdminRole(user)}"
+                                 rendered="#{rolesHelper.isAdmin(user)}"
+                                 value="Remove admin role"
+                                 styleClass="btn btn-primary btn-sm"/>
+            </h:form>
+        </h:column>
+    </h:dataTable>
+</composite:implementation>
+</html>

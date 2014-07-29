@@ -46,20 +46,37 @@ public class FolderDiffTest {
 						"src/main/resources/string/text.properties" }));
 
 		String newPath = "src/test/resources/plugins/diff/folder_new/";
-		
+
 		List<DiffFile> diffFiles = folderDiff.generateFolderDiff(
-				"src/test/resources/plugins/diff/folder_old/",
-				newPath);
-		
+				"src/test/resources/plugins/diff/folder_old/", newPath);
+
 		for (DiffFile df : diffFiles) {
 			String tmp = df.getNewFile().getPath();
 			tmp = tmp.replace("\\", "/");
 			tmp = tmp.replace(newPath, "");
-			
-			Assert.assertTrue("Soubor neni obsazen v seznamu", names.contains(tmp));
+
+			Assert.assertTrue("Soubor neni obsazen v seznamu",
+					names.contains(tmp));
 			names.remove(tmp);
 		}
+
+		Assert.assertTrue("Tyto soubory byly ocekavany: " + names,
+				names.isEmpty());
+	}
+
+	@Test
+	public void generateFolderDiffSecTest() {
+		String newPath = "src/test/resources/plugins/diff/newData/compile/";
+
+		List<DiffFile> diffFiles = folderDiff.generateFolderDiff(
+				"src/test/resources/plugins/diff/oldData/compile/", newPath);
+		folderDiff.generateFolderDiffPostProcess(diffFiles);
 		
-		Assert.assertTrue("Tyto soubory byly ocekavany: " + names, names.isEmpty());
+		for (DiffFile df : diffFiles) {
+			System.out.println(df.getNewFile());
+			for (DiffFile dff : df.getSlaveClasses()) {
+				System.out.println(" - " + dff.getNewFile());
+			}
+		}
 	}
 }

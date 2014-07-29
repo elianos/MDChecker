@@ -1,13 +1,18 @@
 package cz.profinit.csobp.mdchecker.plugins.diff;
 
 import java.io.File;
-import java.security.NoSuchAlgorithmException;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
 
 import cz.profinit.csobp.mdchecker.plugins.diff.model.DiffFile;
-import cz.profinit.csobp.mdchecker.plugins.diff.service.Md5Generator;
 
 /**
  * 
@@ -17,20 +22,11 @@ import cz.profinit.csobp.mdchecker.plugins.diff.service.Md5Generator;
  */
 public class FolderDiff {
 
-	/**
-	 * Instance Md5Generatoru
-	 */
-	private Md5Generator md5Generator;
-
 	public FolderDiff() {
-		try {
-			md5Generator = Md5Generator.getInstance();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 
+	
 	/**
 	 * Rekurzivni metoda generujcii rozdil dvou slozek. Pokud je nova slozka
 	 * null, vraci prazdny set. Pokud je stara slozka null, vraci diff z nove
@@ -41,8 +37,10 @@ public class FolderDiff {
 	 * slozka a soubor, oznacuji jako diff novou variantu, bez ohledu na tu
 	 * starou.
 	 * 
-	 * @param oldBasePath cesta ke staremu zdroji dat
-	 * @param newBasePath cesta k nvoemu zdroji dat
+	 * @param oldBasePath
+	 *            cesta ke staremu zdroji dat
+	 * @param newBasePath
+	 *            cesta k nvoemu zdroji dat
 	 * 
 	 * @return vraci vis zahlavi javadoc.
 	 */
@@ -75,12 +73,15 @@ public class FolderDiff {
 
 		// Oba dva jsou soubory
 		if (oldFile.isFile() && newFile.isFile()) {
-			String oldCheckSum = md5Generator.generateMd5(oldFile);
-			String newCheckSum = md5Generator.generateMd5(newFile);
-			// Pokud maji soubory rozdilnou md5 generuji diff
-			if (!oldCheckSum.equals(newCheckSum)) {
-				result.add(new DiffFile(oldFile, newFile));
-				return result;
+			try {
+				// Pokud maji soubory rozdilnou md5 generuji diff
+				if (!FileUtils.contentEquals(oldFile, newFile)) {
+					result.add(new DiffFile(oldFile, newFile));
+					return result;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			// Oba dva jsou slozky
 		} else if (oldFile.isDirectory() && newFile.isDirectory()) {
@@ -95,7 +96,6 @@ public class FolderDiff {
 				}
 				String newpath = new File(newFile, fileName).getPath();
 				result.addAll(generateFolderDiff(oldPath, newpath));
-
 			}
 			// Porovnavam slozku a soubor...
 		} else {
@@ -104,6 +104,44 @@ public class FolderDiff {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Metoda prochazi vygenerovany diff a slucuje k hlavnim class souborum
+	 * pridava jejich podcasti. 
+	 * 
+	 * Metoda se ma volat po dokonceni rekurzivni funkce {@link FolderDiff#generateFolderDiff(String, String)}!
+	 * 
+	 * @param diffFile seznam diff souboru.
+	 */
+	public void generateFolderDiffPostProcess(List<DiffFile> diffFile) {
+		Map<String, DiffFile> masterClasses = new HashMap<String, DiffFile>();
+		Map<String, Set<DiffFile>> subClasses = new HashMap<String, Set<DiffFile>>();
+
+		for (DiffFile dFile : diffFile) {
+			if (dFile.isClassFile()) {
+				if (dFile.isMasterClassFile()) {
+					masterClasses.put(dFile.getFilenameWithoutExtension(),
+							dFile);
+				} else {
+					String masterName = dFile.getMasterFilename();
+
+					if (!subClasses.containsKey(masterName)) {
+						subClasses.put(masterName, new HashSet<DiffFile>());
+					}
+					Set<DiffFile> set = subClasses.get(masterName);
+					set.add(dFile);
+				}
+			}
+		}
+
+		for (String masterName : subClasses.keySet()) {
+			if (masterClasses.containsKey(masterName)) {
+				masterClasses.get(masterName).setSlaveClasses(
+						subClasses.get(masterName));
+			}
+		}
+
 	}
 
 }
