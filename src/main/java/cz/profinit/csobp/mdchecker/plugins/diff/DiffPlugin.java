@@ -41,7 +41,7 @@ public class DiffPlugin extends MDPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Patch patch = DiffUtils.diff(original, revised);
+//		Patch patch = DiffUtils.diff(original, revised);
 
 	};
 

@@ -1,6 +1,5 @@
 package cz.profinit.csobp.mdchecker.plugins.diff.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 

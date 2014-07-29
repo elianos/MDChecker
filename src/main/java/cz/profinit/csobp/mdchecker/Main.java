@@ -6,17 +6,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import cz.profinit.csobp.mdchecker.core.MDContainer;
-import cz.profinit.csobp.mdchecker.plugins.diff.DiffGenerator;
 import cz.profinit.csobp.mdchecker.plugins.loadconfig.LoadConfigPlugin;
-import difflib.DiffUtils;
-import difflib.Patch;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by usul on 19.6.2014.
