@@ -10,8 +10,6 @@ import org.apache.commons.io.FileUtils;
 
 import jdiff.APIComparator;
 import cz.profinit.csobp.mdchecker.plugins.MDPlugin;
-import difflib.DiffUtils;
-import difflib.Patch;
 
 /**
  * Diff Plugin slouzi k vytvorezeni diffu mezi dvemi dodavkami.
